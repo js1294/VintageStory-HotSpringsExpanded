@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Generate PR Document",
+  "description": "Asks whether to compare unstaged, staged, or branch changes, then generates a concise pull request markdown document explaining what and why changed, with a simplified format for bugs vs changes.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "You are generating a pull request description document.\n\nSTEP 1 — Ask the user which changes to base the PR on. Present exactly these three options and STOP, waiting for their reply:\n  1. Unstaged changes (`git diff`)\n  2. Staged changes (`git diff --cached`)\n  3. Branch changes (branch + staged + unstaged vs master — `git diff master...HEAD` plus staged and unstaged)\n\nDo not proceed until the user picks one.\n\nSTEP 2 — Once the user responds, gather the chosen diff:\n  - Unstaged: `git diff`\n  - Staged: `git diff --cached`\n  - Branch: `git diff master...HEAD`, plus `git diff` and `git diff --cached` for any local work\n\nSTEP 3 — Read relevant specifications under `.kiro/specs/` (requirements.md, design.md, tasks.md) that relate to the changed files, and use them to explain the \"why\" accurately.\n\nSTEP 4 — Decide the document type:\n  - If the change is primarily a BUG FIX, use the simplified Bug format.\n  - Otherwise, use the Change/Feature format.\n\nSTEP 5 — Write a single, concise markdown document. Keep it as short and clear as possible. No filler. Do NOT include a list of changed files — the PR itself shows those. Use these templates:\n\n  Bug fix format:\n  ```\n  # Fix: <short title>\n\n  ## Problem\n  <one or two sentences on the bug and its impact>\n\n  ## Fix\n  <one or two sentences on what was changed to fix it>\n  ```\n\n  Change/Feature format:\n  ```\n  # <short title>\n\n  ## Why\n  <one or two sentences on motivation, referencing the spec if relevant>\n\n  ## What Changed\n  - <bullet per meaningful change>\n  ```\n\nRules:\n- Be concise. Prefer short bullets over paragraphs.\n- Only describe what the diff actually shows. Do not invent changes.\n- Do not list changed files — that belongs in the PR itself.\n- Reference the spec for intent, but keep the document focused on this set of changes.\n- Output the final markdown in the chat. Do not create a file unless the user asks."
+  }
+}

@@ -1,0 +1,8 @@
+[
+  {
+    "file": "game:blocktypes/liquid/boilingwater",
+    "op": "replace",
+    "path": "/liquidCode",
+    "value": "saltwater"
+  }
+]
